@@ -1,0 +1,14 @@
+*.log
+php-server-*.out.log
+php-server-*.err.log
+
+uploads/materi/*
+uploads/tugas/*
+uploads/submissions/*
+!uploads/materi/.gitkeep
+!uploads/tugas/.gitkeep
+!uploads/submissions/.gitkeep
+
+.DS_Store
+Thumbs.db
+__MACOSX/
