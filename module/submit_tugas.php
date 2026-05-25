@@ -2,20 +2,20 @@
 require_once __DIR__ . '/_akademik.php';
 $id = (int) ($_GET['id'] ?? 0);
 $userId = (int) $_SESSION['user_id'];
-$stmt = mysqli_prepare($koneksi, "SELECT a.*, c.judul AS course_title FROM assignments a JOIN courses c ON c.id = a.course_id WHERE a.id = ?");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$assignment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$stmt = db_prepare($koneksi, "SELECT a.*, c.judul AS course_title FROM assignments a JOIN courses c ON c.id = a.course_id WHERE a.id = ?");
+db_stmt_bind_param($stmt, "i", $id);
+db_stmt_execute($stmt);
+$assignment = db_fetch_assoc(db_stmt_get_result($stmt));
 
 if (!$assignment || !can_view_course($koneksi, (int) $assignment['course_id'])) {
     echo '<div class="alert alert-danger">Tugas tidak ditemukan atau belum dienroll.</div>';
     return;
 }
 
-$stmt = mysqli_prepare($koneksi, "SELECT * FROM assignment_submissions WHERE assignment_id = ? AND user_id = ?");
-mysqli_stmt_bind_param($stmt, "ii", $id, $userId);
-mysqli_stmt_execute($stmt);
-$submission = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$stmt = db_prepare($koneksi, "SELECT * FROM assignment_submissions WHERE assignment_id = ? AND user_id = ?");
+db_stmt_bind_param($stmt, "ii", $id, $userId);
+db_stmt_execute($stmt);
+$submission = db_fetch_assoc(db_stmt_get_result($stmt));
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Submit Tugas</h1>

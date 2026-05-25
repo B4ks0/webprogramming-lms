@@ -3,26 +3,26 @@ $userId = (int) ($_SESSION['user_id'] ?? 0);
 $role = $_SESSION['role'] ?? 'mahasiswa';
 
 if ($role === 'dosen') {
-    $stmt = mysqli_prepare($koneksi, "SELECT c.*, u.nama_lengkap AS dosen, cat.nama_kategori, COUNT(e.id) AS jumlah_mahasiswa FROM courses c JOIN users u ON u.id = c.teacher_id LEFT JOIN categories cat ON cat.id = c.category_id LEFT JOIN enrollments e ON e.course_id = c.id WHERE c.teacher_id = ? GROUP BY c.id ORDER BY c.created_at DESC");
-    mysqli_stmt_bind_param($stmt, "i", $userId);
-    mysqli_stmt_execute($stmt);
-    $courses = mysqli_stmt_get_result($stmt);
+    $stmt = db_prepare($koneksi, "SELECT c.*, u.nama_lengkap AS dosen, cat.nama_kategori, COUNT(e.id) AS jumlah_mahasiswa FROM courses c JOIN users u ON u.id = c.teacher_id LEFT JOIN categories cat ON cat.id = c.category_id LEFT JOIN enrollments e ON e.course_id = c.id WHERE c.teacher_id = ? GROUP BY c.id ORDER BY c.created_at DESC");
+    db_stmt_bind_param($stmt, "i", $userId);
+    db_stmt_execute($stmt);
+    $courses = db_stmt_get_result($stmt);
 } elseif ($role === 'mahasiswa') {
-    $stmt = mysqli_prepare($koneksi, "SELECT c.*, u.nama_lengkap AS dosen, cat.nama_kategori, COUNT(e2.id) AS jumlah_mahasiswa FROM courses c JOIN users u ON u.id = c.teacher_id LEFT JOIN categories cat ON cat.id = c.category_id JOIN enrollments e ON e.course_id = c.id AND e.user_id = ? LEFT JOIN enrollments e2 ON e2.course_id = c.id GROUP BY c.id ORDER BY c.created_at DESC");
-    mysqli_stmt_bind_param($stmt, "i", $userId);
-    mysqli_stmt_execute($stmt);
-    $courses = mysqli_stmt_get_result($stmt);
+    $stmt = db_prepare($koneksi, "SELECT c.*, u.nama_lengkap AS dosen, cat.nama_kategori, COUNT(e2.id) AS jumlah_mahasiswa FROM courses c JOIN users u ON u.id = c.teacher_id LEFT JOIN categories cat ON cat.id = c.category_id JOIN enrollments e ON e.course_id = c.id AND e.user_id = ? LEFT JOIN enrollments e2 ON e2.course_id = c.id GROUP BY c.id ORDER BY c.created_at DESC");
+    db_stmt_bind_param($stmt, "i", $userId);
+    db_stmt_execute($stmt);
+    $courses = db_stmt_get_result($stmt);
 } else {
-    $courses = mysqli_query($koneksi, "SELECT c.*, u.nama_lengkap AS dosen, cat.nama_kategori, COUNT(e.id) AS jumlah_mahasiswa FROM courses c JOIN users u ON u.id = c.teacher_id LEFT JOIN categories cat ON cat.id = c.category_id LEFT JOIN enrollments e ON e.course_id = c.id GROUP BY c.id ORDER BY c.created_at DESC");
+    $courses = db_query($koneksi, "SELECT c.*, u.nama_lengkap AS dosen, cat.nama_kategori, COUNT(e.id) AS jumlah_mahasiswa FROM courses c JOIN users u ON u.id = c.teacher_id LEFT JOIN categories cat ON cat.id = c.category_id LEFT JOIN enrollments e ON e.course_id = c.id GROUP BY c.id ORDER BY c.created_at DESC");
 }
 
 $enrolled = [];
 if ($role === 'mahasiswa') {
-    $stmt = mysqli_prepare($koneksi, "SELECT course_id, status_belajar FROM enrollments WHERE user_id = ?");
-    mysqli_stmt_bind_param($stmt, "i", $userId);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    while ($row = mysqli_fetch_assoc($result)) {
+    $stmt = db_prepare($koneksi, "SELECT course_id, status_belajar FROM enrollments WHERE user_id = ?");
+    db_stmt_bind_param($stmt, "i", $userId);
+    db_stmt_execute($stmt);
+    $result = db_stmt_get_result($stmt);
+    while ($row = db_fetch_assoc($result)) {
         $enrolled[(int) $row['course_id']] = $row['status_belajar'];
     }
 }
@@ -39,7 +39,7 @@ if ($role === 'mahasiswa') {
 <?php endif; ?>
 
 <div class="row">
-    <?php while ($course = mysqli_fetch_assoc($courses)): ?>
+    <?php while ($course = db_fetch_assoc($courses)): ?>
         <?php
         $courseId = (int) $course['id'];
         $studentStatus = $enrolled[$courseId] ?? null;

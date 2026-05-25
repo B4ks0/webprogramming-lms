@@ -26,12 +26,12 @@ if ($courseId > 0) {
 }
 $sql .= " ORDER BY c.judul, l.urutan, l.created_at DESC";
 
-$stmt = mysqli_prepare($koneksi, $sql);
+$stmt = db_prepare($koneksi, $sql);
 if ($params) {
-    mysqli_stmt_bind_param($stmt, $types, ...$params);
+    db_stmt_bind_param($stmt, $types, ...$params);
 }
-mysqli_stmt_execute($stmt);
-$materials = mysqli_stmt_get_result($stmt);
+db_stmt_execute($stmt);
+$materials = db_stmt_get_result($stmt);
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Materi Kuliah</h1>
@@ -52,7 +52,7 @@ $materials = mysqli_stmt_get_result($stmt);
                 <label>Filter Mata Kuliah</label>
                 <select name="course_id" class="form-control">
                     <option value="0">Semua mata kuliah</option>
-                    <?php while ($course = mysqli_fetch_assoc($coursesForFilter)): ?>
+                    <?php while ($course = db_fetch_assoc($coursesForFilter)): ?>
                         <option value="<?php echo e($course['id']); ?>" <?php echo $courseId === (int) $course['id'] ? 'selected' : ''; ?>><?php echo e($course['judul']); ?></option>
                     <?php endwhile; ?>
                 </select>
@@ -78,7 +78,7 @@ $materials = mysqli_stmt_get_result($stmt);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($material = mysqli_fetch_assoc($materials)): ?>
+                    <?php while ($material = db_fetch_assoc($materials)): ?>
                     <tr>
                         <td><?php echo e($material['course_title']); ?><br><small><?php echo e($material['dosen']); ?></small></td>
                         <td>

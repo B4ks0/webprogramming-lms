@@ -15,13 +15,13 @@ $deskripsi = trim($_POST['deskripsi'] ?? '');
 $status = $_POST['status'] === 'draft' ? 'draft' : 'published';
 
 if ($_SESSION['role'] === 'dosen') {
-    $stmt = mysqli_prepare($koneksi, "UPDATE courses SET teacher_id = ?, category_id = ?, judul = ?, deskripsi = ?, status = ? WHERE id = ? AND teacher_id = ?");
-    mysqli_stmt_bind_param($stmt, "iisssii", $teacherId, $categoryId, $judul, $deskripsi, $status, $id, $teacherId);
+    $stmt = db_prepare($koneksi, "UPDATE courses SET teacher_id = ?, category_id = ?, judul = ?, deskripsi = ?, status = ? WHERE id = ? AND teacher_id = ?");
+    db_stmt_bind_param($stmt, "iisssii", $teacherId, $categoryId, $judul, $deskripsi, $status, $id, $teacherId);
 } else {
-    $stmt = mysqli_prepare($koneksi, "UPDATE courses SET teacher_id = ?, category_id = ?, judul = ?, deskripsi = ?, status = ? WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "iisssi", $teacherId, $categoryId, $judul, $deskripsi, $status, $id);
+    $stmt = db_prepare($koneksi, "UPDATE courses SET teacher_id = ?, category_id = ?, judul = ?, deskripsi = ?, status = ? WHERE id = ?");
+    db_stmt_bind_param($stmt, "iisssi", $teacherId, $categoryId, $judul, $deskripsi, $status, $id);
 }
-mysqli_stmt_execute($stmt);
+db_stmt_execute($stmt);
 
 header('Location: ../layout.php?page=matakuliah&pesan=edit');
 exit;

@@ -1,9 +1,9 @@
 <?php
 $id = (int) ($_GET['id'] ?? 0);
-$stmt = mysqli_prepare($koneksi, "SELECT id, nama_lengkap, email, role FROM users WHERE id = ?");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$stmt = db_prepare($koneksi, "SELECT id, nama_lengkap, email, role FROM users WHERE id = ?");
+db_stmt_bind_param($stmt, "i", $id);
+db_stmt_execute($stmt);
+$user = db_fetch_assoc(db_stmt_get_result($stmt));
 
 if (!$user) {
     echo '<div class="alert alert-danger">User tidak ditemukan.</div>';

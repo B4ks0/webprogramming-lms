@@ -1,5 +1,5 @@
 <?php
-$users = mysqli_query($koneksi, "SELECT id, nama_lengkap, email, role, created_at FROM users ORDER BY role, nama_lengkap");
+$users = db_query($koneksi, "SELECT id, nama_lengkap, email, role, created_at FROM users ORDER BY role, nama_lengkap");
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Manajemen Pengguna</h1>
@@ -24,7 +24,7 @@ $users = mysqli_query($koneksi, "SELECT id, nama_lengkap, email, role, created_a
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($user = mysqli_fetch_assoc($users)): ?>
+                    <?php while ($user = db_fetch_assoc($users)): ?>
                     <tr>
                         <td><?php echo e($user['nama_lengkap']); ?></td>
                         <td><?php echo e($user['email']); ?></td>

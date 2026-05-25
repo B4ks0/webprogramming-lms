@@ -1,7 +1,7 @@
 <?php
 $isDosen = ($_SESSION['role'] ?? '') === 'dosen';
-$dosens = mysqli_query($koneksi, "SELECT id, nama_lengkap FROM users WHERE role='dosen' ORDER BY nama_lengkap");
-$categories = mysqli_query($koneksi, "SELECT id, nama_kategori FROM categories ORDER BY nama_kategori");
+$dosens = db_query($koneksi, "SELECT id, nama_lengkap FROM users WHERE role='dosen' ORDER BY nama_lengkap");
+$categories = db_query($koneksi, "SELECT id, nama_kategori FROM categories ORDER BY nama_kategori");
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Tambah Mata Kuliah</h1>
@@ -22,7 +22,7 @@ $categories = mysqli_query($koneksi, "SELECT id, nama_kategori FROM categories O
                 <div class="form-group">
                     <label>Dosen Pengampu</label>
                     <select name="teacher_id" class="form-control" required>
-                        <?php while ($dosen = mysqli_fetch_assoc($dosens)): ?>
+                        <?php while ($dosen = db_fetch_assoc($dosens)): ?>
                             <option value="<?php echo e($dosen['id']); ?>"><?php echo e($dosen['nama_lengkap']); ?></option>
                         <?php endwhile; ?>
                     </select>
@@ -32,7 +32,7 @@ $categories = mysqli_query($koneksi, "SELECT id, nama_kategori FROM categories O
                 <label>Kategori</label>
                 <select name="category_id" class="form-control">
                     <option value="">Tanpa kategori</option>
-                    <?php while ($category = mysqli_fetch_assoc($categories)): ?>
+                    <?php while ($category = db_fetch_assoc($categories)): ?>
                         <option value="<?php echo e($category['id']); ?>"><?php echo e($category['nama_kategori']); ?></option>
                     <?php endwhile; ?>
                 </select>

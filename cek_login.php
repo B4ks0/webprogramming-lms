@@ -5,11 +5,11 @@ include 'koneksi/koneksi.php';
 $email = trim($_POST['username'] ?? '');
 $password = $_POST['password'] ?? '';
 
-$stmt = mysqli_prepare($koneksi, "SELECT id, nama_lengkap, email, password, role FROM users WHERE email = ? LIMIT 1");
-mysqli_stmt_bind_param($stmt, "s", $email);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$user = mysqli_fetch_assoc($result);
+$stmt = db_prepare($koneksi, "SELECT id, nama_lengkap, email, password, role FROM users WHERE email = ? LIMIT 1");
+db_stmt_bind_param($stmt, "s", $email);
+db_stmt_execute($stmt);
+$result = db_stmt_get_result($stmt);
+$user = db_fetch_assoc($result);
 
 if (!$user || !password_verify($password, $user['password'])) {
     header('Location: login.php?pesan=gagal');

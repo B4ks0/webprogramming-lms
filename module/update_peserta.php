@@ -15,9 +15,9 @@ $nilai = $_POST['nilai_akhir'] === '' ? null : (float) $_POST['nilai_akhir'];
 $catatan = trim($_POST['catatan_dosen'] ?? '');
 
 if (can_manage_course($koneksi, $courseId)) {
-    $stmt = mysqli_prepare($koneksi, "UPDATE enrollments SET status_belajar = ?, nilai_akhir = ?, catatan_dosen = ? WHERE id = ? AND course_id = ?");
-    mysqli_stmt_bind_param($stmt, "sdsii", $status, $nilai, $catatan, $id, $courseId);
-    mysqli_stmt_execute($stmt);
+    $stmt = db_prepare($koneksi, "UPDATE enrollments SET status_belajar = ?, nilai_akhir = ?, catatan_dosen = ? WHERE id = ? AND course_id = ?");
+    db_stmt_bind_param($stmt, "sdsii", $status, $nilai, $catatan, $id, $courseId);
+    db_stmt_execute($stmt);
 }
 
 header('Location: ../layout.php?page=peserta&course_id=' . $courseId . '&pesan=update');

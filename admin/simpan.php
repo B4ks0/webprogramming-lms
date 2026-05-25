@@ -13,9 +13,9 @@ $categoryId = $_POST['category_id'] === '' ? null : (int) $_POST['category_id'];
 $deskripsi = trim($_POST['deskripsi'] ?? '');
 $status = $_POST['status'] === 'draft' ? 'draft' : 'published';
 
-$stmt = mysqli_prepare($koneksi, "INSERT INTO courses (teacher_id, category_id, judul, deskripsi, harga, status) VALUES (?, ?, ?, ?, 0, ?)");
-mysqli_stmt_bind_param($stmt, "iisss", $teacherId, $categoryId, $judul, $deskripsi, $status);
-mysqli_stmt_execute($stmt);
+$stmt = db_prepare($koneksi, "INSERT INTO courses (teacher_id, category_id, judul, deskripsi, harga, status) VALUES (?, ?, ?, ?, 0, ?)");
+db_stmt_bind_param($stmt, "iisss", $teacherId, $categoryId, $judul, $deskripsi, $status);
+db_stmt_execute($stmt);
 
 header('Location: ../layout.php?page=matakuliah&pesan=simpan');
 exit;

@@ -1,9 +1,9 @@
 <?php
-$totalCourses = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) total FROM courses"))['total'] ?? 0;
-$totalDosen = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) total FROM users WHERE role='dosen'"))['total'] ?? 0;
-$totalMahasiswa = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) total FROM users WHERE role='mahasiswa'"))['total'] ?? 0;
-$totalEnrollments = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) total FROM enrollments"))['total'] ?? 0;
-$latestCourses = mysqli_query($koneksi, "SELECT c.id, c.judul, c.status, u.nama_lengkap AS dosen FROM courses c JOIN users u ON u.id = c.teacher_id ORDER BY c.created_at DESC LIMIT 5");
+$totalCourses = db_fetch_assoc(db_query($koneksi, "SELECT COUNT(*) total FROM courses"))['total'] ?? 0;
+$totalDosen = db_fetch_assoc(db_query($koneksi, "SELECT COUNT(*) total FROM users WHERE role='dosen'"))['total'] ?? 0;
+$totalMahasiswa = db_fetch_assoc(db_query($koneksi, "SELECT COUNT(*) total FROM users WHERE role='mahasiswa'"))['total'] ?? 0;
+$totalEnrollments = db_fetch_assoc(db_query($koneksi, "SELECT COUNT(*) total FROM enrollments"))['total'] ?? 0;
+$latestCourses = db_query($koneksi, "SELECT c.id, c.judul, c.status, u.nama_lengkap AS dosen FROM courses c JOIN users u ON u.id = c.teacher_id ORDER BY c.created_at DESC LIMIT 5");
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard Admin</h1>
@@ -38,7 +38,7 @@ $latestCourses = mysqli_query($koneksi, "SELECT c.id, c.judul, c.status, u.nama_
             <table class="table table-bordered mb-0">
                 <thead><tr><th>Mata Kuliah</th><th>Dosen</th><th>Status</th><th>Aksi</th></tr></thead>
                 <tbody>
-                <?php while ($course = mysqli_fetch_assoc($latestCourses)): ?>
+                <?php while ($course = db_fetch_assoc($latestCourses)): ?>
                     <tr>
                         <td><?php echo e($course['judul']); ?></td>
                         <td><?php echo e($course['dosen']); ?></td>

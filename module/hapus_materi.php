@@ -9,15 +9,15 @@ if (!in_array($_SESSION['role'] ?? '', ['admin', 'dosen'], true)) {
 }
 
 $id = (int) ($_GET['id'] ?? 0);
-$stmt = mysqli_prepare($koneksi, "SELECT course_id FROM lessons WHERE id = ?");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$material = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$stmt = db_prepare($koneksi, "SELECT course_id FROM lessons WHERE id = ?");
+db_stmt_bind_param($stmt, "i", $id);
+db_stmt_execute($stmt);
+$material = db_fetch_assoc(db_stmt_get_result($stmt));
 
 if ($material && can_manage_course($koneksi, (int) $material['course_id'])) {
-    $stmt = mysqli_prepare($koneksi, "DELETE FROM lessons WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    mysqli_stmt_execute($stmt);
+    $stmt = db_prepare($koneksi, "DELETE FROM lessons WHERE id = ?");
+    db_stmt_bind_param($stmt, "i", $id);
+    db_stmt_execute($stmt);
 }
 
 header('Location: ../layout.php?page=materi&pesan=hapus');

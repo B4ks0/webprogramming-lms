@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__ . '/_akademik.php';
 $id = (int) ($_GET['id'] ?? 0);
-$stmt = mysqli_prepare($koneksi, "SELECT * FROM lessons WHERE id = ?");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$material = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$stmt = db_prepare($koneksi, "SELECT * FROM lessons WHERE id = ?");
+db_stmt_bind_param($stmt, "i", $id);
+db_stmt_execute($stmt);
+$material = db_fetch_assoc(db_stmt_get_result($stmt));
 
 if (!$material || !can_manage_course($koneksi, (int) $material['course_id'])) {
     echo '<div class="alert alert-danger">Materi tidak ditemukan atau tidak bisa diakses.</div>';
@@ -25,7 +25,7 @@ $courses = course_query_for_role($koneksi);
             <div class="form-group">
                 <label>Mata Kuliah</label>
                 <select name="course_id" class="form-control" required>
-                    <?php while ($course = mysqli_fetch_assoc($courses)): ?>
+                    <?php while ($course = db_fetch_assoc($courses)): ?>
                         <option value="<?php echo e($course['id']); ?>" <?php echo (int) $material['course_id'] === (int) $course['id'] ? 'selected' : ''; ?>><?php echo e($course['judul']); ?></option>
                     <?php endwhile; ?>
                 </select>

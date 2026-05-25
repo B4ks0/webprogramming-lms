@@ -13,7 +13,7 @@ $courses = course_query_for_role($koneksi);
             <div class="form-group">
                 <label>Mata Kuliah</label>
                 <select name="course_id" class="form-control" required>
-                    <?php while ($course = mysqli_fetch_assoc($courses)): ?>
+                    <?php while ($course = db_fetch_assoc($courses)): ?>
                         <option value="<?php echo e($course['id']); ?>"><?php echo e($course['judul']); ?></option>
                     <?php endwhile; ?>
                 </select>

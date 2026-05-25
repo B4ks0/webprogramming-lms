@@ -9,6 +9,10 @@ uploads/submissions/*
 !uploads/tugas/.gitkeep
 !uploads/submissions/.gitkeep
 
+database/*.sqlite
+database/*.sqlite-*
+!database/.gitkeep
+
 .DS_Store
 Thumbs.db
 __MACOSX/

@@ -5,7 +5,7 @@ $courseId = (int) ($_GET['course_id'] ?? 0);
 $courses = course_query_for_role($koneksi);
 
 if ($courseId === 0) {
-    $firstCourse = mysqli_fetch_assoc($courses);
+    $firstCourse = db_fetch_assoc($courses);
     if ($firstCourse) {
         $courseId = (int) $firstCourse['id'];
     }
@@ -17,12 +17,12 @@ if ($courseId > 0 && !can_manage_course($koneksi, $courseId)) {
     return;
 }
 
-$students = mysqli_query($koneksi, "SELECT id, nama_lengkap, email FROM users WHERE role='mahasiswa' ORDER BY nama_lengkap");
+$students = db_query($koneksi, "SELECT id, nama_lengkap, email FROM users WHERE role='mahasiswa' ORDER BY nama_lengkap");
 
-$stmt = mysqli_prepare($koneksi, "SELECT e.*, u.nama_lengkap, u.email FROM enrollments e JOIN users u ON u.id = e.user_id WHERE e.course_id = ? ORDER BY u.nama_lengkap");
-mysqli_stmt_bind_param($stmt, "i", $courseId);
-mysqli_stmt_execute($stmt);
-$participants = mysqli_stmt_get_result($stmt);
+$stmt = db_prepare($koneksi, "SELECT e.*, u.nama_lengkap, u.email FROM enrollments e JOIN users u ON u.id = e.user_id WHERE e.course_id = ? ORDER BY u.nama_lengkap");
+db_stmt_bind_param($stmt, "i", $courseId);
+db_stmt_execute($stmt);
+$participants = db_stmt_get_result($stmt);
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Peserta Mata Kuliah</h1>
@@ -40,7 +40,7 @@ $participants = mysqli_stmt_get_result($stmt);
             <div class="col-md-8">
                 <label>Mata Kuliah</label>
                 <select name="course_id" class="form-control">
-                    <?php while ($course = mysqli_fetch_assoc($courses)): ?>
+                    <?php while ($course = db_fetch_assoc($courses)): ?>
                         <option value="<?php echo e($course['id']); ?>" <?php echo $courseId === (int) $course['id'] ? 'selected' : ''; ?>><?php echo e($course['judul']); ?></option>
                     <?php endwhile; ?>
                 </select>
@@ -62,7 +62,7 @@ $participants = mysqli_stmt_get_result($stmt);
                 <div class="col-md-8">
                     <label>Mahasiswa</label>
                     <select name="user_id" class="form-control" required>
-                        <?php while ($student = mysqli_fetch_assoc($students)): ?>
+                        <?php while ($student = db_fetch_assoc($students)): ?>
                             <option value="<?php echo e($student['id']); ?>"><?php echo e($student['nama_lengkap']); ?> - <?php echo e($student['email']); ?></option>
                         <?php endwhile; ?>
                     </select>
@@ -90,7 +90,7 @@ $participants = mysqli_stmt_get_result($stmt);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($participant = mysqli_fetch_assoc($participants)): ?>
+                    <?php while ($participant = db_fetch_assoc($participants)): ?>
                     <tr>
                         <td><?php echo e($participant['nama_lengkap']); ?><br><small><?php echo e($participant['email']); ?></small></td>
                         <td>

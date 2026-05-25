@@ -1,19 +1,19 @@
 <?php
 $userId = (int) $_SESSION['user_id'];
-$stmt = mysqli_prepare($koneksi, "SELECT COUNT(*) total FROM courses WHERE teacher_id = ?");
-mysqli_stmt_bind_param($stmt, "i", $userId);
-mysqli_stmt_execute($stmt);
-$totalCourses = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['total'] ?? 0;
+$stmt = db_prepare($koneksi, "SELECT COUNT(*) total FROM courses WHERE teacher_id = ?");
+db_stmt_bind_param($stmt, "i", $userId);
+db_stmt_execute($stmt);
+$totalCourses = db_fetch_assoc(db_stmt_get_result($stmt))['total'] ?? 0;
 
-$stmt = mysqli_prepare($koneksi, "SELECT COUNT(e.id) total FROM enrollments e JOIN courses c ON c.id = e.course_id WHERE c.teacher_id = ?");
-mysqli_stmt_bind_param($stmt, "i", $userId);
-mysqli_stmt_execute($stmt);
-$totalStudents = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['total'] ?? 0;
+$stmt = db_prepare($koneksi, "SELECT COUNT(e.id) total FROM enrollments e JOIN courses c ON c.id = e.course_id WHERE c.teacher_id = ?");
+db_stmt_bind_param($stmt, "i", $userId);
+db_stmt_execute($stmt);
+$totalStudents = db_fetch_assoc(db_stmt_get_result($stmt))['total'] ?? 0;
 
-$stmt = mysqli_prepare($koneksi, "SELECT c.id, c.judul, c.status, COUNT(e.id) jumlah_mahasiswa FROM courses c LEFT JOIN enrollments e ON e.course_id = c.id WHERE c.teacher_id = ? GROUP BY c.id ORDER BY c.created_at DESC");
-mysqli_stmt_bind_param($stmt, "i", $userId);
-mysqli_stmt_execute($stmt);
-$courses = mysqli_stmt_get_result($stmt);
+$stmt = db_prepare($koneksi, "SELECT c.id, c.judul, c.status, COUNT(e.id) jumlah_mahasiswa FROM courses c LEFT JOIN enrollments e ON e.course_id = c.id WHERE c.teacher_id = ? GROUP BY c.id ORDER BY c.created_at DESC");
+db_stmt_bind_param($stmt, "i", $userId);
+db_stmt_execute($stmt);
+$courses = db_stmt_get_result($stmt);
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard Dosen</h1>
@@ -40,7 +40,7 @@ $courses = mysqli_stmt_get_result($stmt);
             <table class="table table-bordered mb-0">
                 <thead><tr><th>Mata Kuliah</th><th>Status</th><th>Mahasiswa</th><th>Aksi</th></tr></thead>
                 <tbody>
-                    <?php while ($course = mysqli_fetch_assoc($courses)): ?>
+                    <?php while ($course = db_fetch_assoc($courses)): ?>
                     <tr>
                         <td><?php echo e($course['judul']); ?></td>
                         <td><?php echo e($course['status']); ?></td>

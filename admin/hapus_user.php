@@ -9,9 +9,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
 $id = (int) ($_GET['id'] ?? 0);
 if ($id !== (int) $_SESSION['user_id']) {
-    $stmt = mysqli_prepare($koneksi, "DELETE FROM users WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    mysqli_stmt_execute($stmt);
+    $stmt = db_prepare($koneksi, "DELETE FROM users WHERE id = ?");
+    db_stmt_bind_param($stmt, "i", $id);
+    db_stmt_execute($stmt);
 }
 
 header('Location: ../layout.php?page=users&pesan=hapus');

@@ -2,18 +2,18 @@
 $id = (int) ($_GET['id'] ?? 0);
 $role = $_SESSION['role'] ?? '';
 $userId = (int) ($_SESSION['user_id'] ?? 0);
-$stmt = mysqli_prepare($koneksi, "SELECT * FROM courses WHERE id = ?");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$course = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$stmt = db_prepare($koneksi, "SELECT * FROM courses WHERE id = ?");
+db_stmt_bind_param($stmt, "i", $id);
+db_stmt_execute($stmt);
+$course = db_fetch_assoc(db_stmt_get_result($stmt));
 
 if (!$course || ($role === 'dosen' && (int) $course['teacher_id'] !== $userId)) {
     echo '<div class="alert alert-danger">Mata kuliah tidak ditemukan.</div>';
     return;
 }
 
-$dosens = mysqli_query($koneksi, "SELECT id, nama_lengkap FROM users WHERE role='dosen' ORDER BY nama_lengkap");
-$categories = mysqli_query($koneksi, "SELECT id, nama_kategori FROM categories ORDER BY nama_kategori");
+$dosens = db_query($koneksi, "SELECT id, nama_lengkap FROM users WHERE role='dosen' ORDER BY nama_lengkap");
+$categories = db_query($koneksi, "SELECT id, nama_kategori FROM categories ORDER BY nama_kategori");
 ?>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Ubah Mata Kuliah</h1>
@@ -34,7 +34,7 @@ $categories = mysqli_query($koneksi, "SELECT id, nama_kategori FROM categories O
                 <div class="form-group">
                     <label>Dosen Pengampu</label>
                     <select name="teacher_id" class="form-control" required>
-                        <?php while ($dosen = mysqli_fetch_assoc($dosens)): ?>
+                        <?php while ($dosen = db_fetch_assoc($dosens)): ?>
                             <option value="<?php echo e($dosen['id']); ?>" <?php echo (int) $course['teacher_id'] === (int) $dosen['id'] ? 'selected' : ''; ?>><?php echo e($dosen['nama_lengkap']); ?></option>
                         <?php endwhile; ?>
                     </select>
@@ -44,7 +44,7 @@ $categories = mysqli_query($koneksi, "SELECT id, nama_kategori FROM categories O
                 <label>Kategori</label>
                 <select name="category_id" class="form-control">
                     <option value="">Tanpa kategori</option>
-                    <?php while ($category = mysqli_fetch_assoc($categories)): ?>
+                    <?php while ($category = db_fetch_assoc($categories)): ?>
                         <option value="<?php echo e($category['id']); ?>" <?php echo (int) $course['category_id'] === (int) $category['id'] ? 'selected' : ''; ?>><?php echo e($category['nama_kategori']); ?></option>
                     <?php endwhile; ?>
                 </select>

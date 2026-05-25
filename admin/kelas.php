@@ -11,8 +11,8 @@
     <?php
 
     $no = 1;
-    $query = mysqli_query($koneksi, "select * from matakuliah");
-    while ($row = mysqli_fetch_array($query)) {
+    $query = db_query($koneksi, "select * from matakuliah");
+    while ($row = db_fetch_array($query)) {
     ?>
         <tr>
             <td><?php echo $no++; ?></td>

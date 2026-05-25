@@ -20,9 +20,9 @@ $video = trim($_POST['video_url'] ?? '');
 $urutan = (int) ($_POST['urutan'] ?? 0);
 $filePath = save_upload('file_materi', 'materi');
 
-$stmt = mysqli_prepare($koneksi, "INSERT INTO lessons (course_id, judul_materi, konten_teks, video_url, file_path, urutan) VALUES (?, ?, ?, ?, ?, ?)");
-mysqli_stmt_bind_param($stmt, "issssi", $courseId, $judul, $konten, $video, $filePath, $urutan);
-mysqli_stmt_execute($stmt);
+$stmt = db_prepare($koneksi, "INSERT INTO lessons (course_id, judul_materi, konten_teks, video_url, file_path, urutan) VALUES (?, ?, ?, ?, ?, ?)");
+db_stmt_bind_param($stmt, "issssi", $courseId, $judul, $konten, $video, $filePath, $urutan);
+db_stmt_execute($stmt);
 
 header('Location: ../layout.php?page=materi&pesan=simpan');
 exit;

@@ -15,13 +15,13 @@ $role = in_array($_POST['role'] ?? '', ['admin', 'dosen', 'mahasiswa'], true) ? 
 
 if ($password !== '') {
     $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = mysqli_prepare($koneksi, "UPDATE users SET nama_lengkap = ?, email = ?, password = ?, role = ? WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "ssssi", $nama, $email, $hash, $role, $id);
+    $stmt = db_prepare($koneksi, "UPDATE users SET nama_lengkap = ?, email = ?, password = ?, role = ? WHERE id = ?");
+    db_stmt_bind_param($stmt, "ssssi", $nama, $email, $hash, $role, $id);
 } else {
-    $stmt = mysqli_prepare($koneksi, "UPDATE users SET nama_lengkap = ?, email = ?, role = ? WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, "sssi", $nama, $email, $role, $id);
+    $stmt = db_prepare($koneksi, "UPDATE users SET nama_lengkap = ?, email = ?, role = ? WHERE id = ?");
+    db_stmt_bind_param($stmt, "sssi", $nama, $email, $role, $id);
 }
-mysqli_stmt_execute($stmt);
+db_stmt_execute($stmt);
 
 if ($id === (int) $_SESSION['user_id']) {
     $_SESSION['username'] = $nama;
