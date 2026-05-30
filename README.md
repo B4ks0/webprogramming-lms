@@ -1,182 +1,168 @@
 # Webprograming LMS
 
-Webprograming LMS adalah aplikasi Learning Management System sederhana berbasis PHP untuk pengelolaan mata kuliah, dosen, mahasiswa, materi, tugas, submission tugas, nilai, dan status belajar.
+Aplikasi Learning Management System berbasis PHP untuk pengelolaan mata kuliah, dosen, mahasiswa, materi, tugas, absensi, jadwal, dan kategori.
 
 ## Fitur
 
-- Login berbasis role: `admin`, `dosen`, `mahasiswa`
-- Admin dapat CRUD user, dosen, mahasiswa, dan mata kuliah
-- Dosen dapat membuat dan mengelola mata kuliah miliknya sendiri
-- Admin/dosen dapat memasukkan mahasiswa ke mata kuliah
-- Mahasiswa tidak bisa enroll sendiri
-- Admin/dosen dapat menentukan status mahasiswa: aktif atau selesai
-- Admin/dosen dapat memberi nilai akhir dan catatan dosen
-- Admin/dosen dapat upload dan CRUD materi
-- Mahasiswa dapat melihat/download materi dari mata kuliah yang sudah dienroll
-- Admin/dosen dapat membuat tugas, upload file tugas, dan menentukan deadline
-- Mahasiswa dapat melihat tugas dan upload submission
-- Admin/dosen dapat cek submission, download jawaban, memberi nilai, dan feedback
-- Mendukung database MySQL dan SQLite
+### Admin
+- Dashboard dengan 8 statistik (Total Users, Mahasiswa, Dosen, Enrollments, Courses, Published, Draft, Lessons)
+- CRUD **Users** (admin, dosen, mahasiswa)
+- CRUD **Courses** (mata kuliah)
+- CRUD **Lessons** (materi per mata kuliah)
+- CRUD **Enrollments** (daftarkan mahasiswa ke mata kuliah)
+- CRUD **Categories** (kategori mata kuliah)
+- CRUD **Ruang Kelas** (data kelas dengan kode dan kapasitas)
+- CRUD **Jadwal** (jadwal per course, kelas, hari, jam, ruangan)
+- CRUD **Absensi** (kehadiran mahasiswa per course & jadwal, filter by mahasiswa/course)
+- Kelola tugas: buat, edit, hapus, cek submission mahasiswa
+- Beri nilai dan feedback submission mahasiswa
+
+### Dosen
+- Dashboard ringkasan mata kuliah yang diampu
+- Kelola mata kuliah, materi, tugas, peserta, jadwal, dan absensi
+
+### Mahasiswa
+- Dashboard status belajar dan nilai akhir
+- Lihat dan download materi
+- Upload submission tugas
+- Lihat nilai dan feedback dosen
 
 ## Akun Demo
 
-```text
-Admin      : admin@example.com / admin123
-Dosen      : dosen@example.com / dosen123
-Mahasiswa  : mahasiswa@example.com / mahasiswa123
+```
+Admin      : admin@example.com    / admin123
+Dosen 1    : dosen@example.com    / dosen123
+Dosen 2    : sari@example.com     / dosen123
+Dosen 3    : hendra@example.com   / dosen123
+Dosen 4    : maya@example.com     / dosen123
+Mahasiswa 1: mahasiswa@example.com / mahasiswa123
+Mahasiswa 2: budi@example.com     / mahasiswa123
+Mahasiswa 3: citra@example.com    / mahasiswa123
+Mahasiswa 4: dian@example.com     / mahasiswa123
+Mahasiswa 5: eko@example.com      / mahasiswa123
+Mahasiswa 6: fina@example.com     / mahasiswa123
 ```
 
-## Struktur Penting
+## Struktur Folder
 
-```text
-admin/                 Halaman dan proses admin
-guru/                  Dashboard dosen
-siswa/                 Dashboard mahasiswa
-module/                Modul materi, tugas, peserta, submission
-koneksi/koneksi.php    Konfigurasi database MySQL/SQLite
-admin/lms.sql          Schema dan seed MySQL
-database/schema_sqlite.sql  Schema dan seed SQLite
-scripts/init_sqlite.php     Generator database SQLite
-uploads/               Folder upload materi, tugas, dan submission
+```
+admin/          Halaman admin (dashboard, CRUD semua fitur)
+guru/           Dashboard dosen
+siswa/          Dashboard mahasiswa
+module/         Modul materi, tugas, peserta, submission
+koneksi/        Konfigurasi koneksi database (MySQL/SQLite)
+database/       File SQL dump dan schema
+  db_webprogramming.sql   Dump MySQL lengkap + dummy data
+  schema_sqlite.sql       Schema SQLite
+scripts/
+  seed_data.sql           Script seed data dummy
+  init_sqlite.php         Generator database SQLite
+uploads/        Folder upload materi, tugas, submission
+assets/         CSS, JS, vendor (Bootstrap, FontAwesome)
 ```
 
 ## Kebutuhan
 
-- PHP 8 atau lebih baru
-- Ekstensi PHP:
-  - `pdo`
-  - `pdo_mysql` untuk MySQL
-  - `pdo_sqlite` untuk SQLite
-- Laragon atau server PHP lokal
-- MySQL jika memakai mode MySQL
+- PHP 8.0 atau lebih baru
+- Ekstensi PHP: `pdo`, `pdo_mysql` (untuk MySQL) atau `pdo_sqlite` (untuk SQLite)
+- Laragon (rekomendasi) atau web server PHP lain
+- MySQL 8 jika menggunakan mode MySQL
 
-Cek ekstensi PHP:
-
+Cek ekstensi:
 ```powershell
 php -m
 ```
 
-## Setup Dengan Laragon MySQL
+---
 
-Gunakan mode ini kalau Laragon dan MySQL aktif.
+## Setup dengan Laragon + MySQL (Rekomendasi)
 
-### 1. Clone repo
+### 1. Clone repo ke folder Laragon
 
 ```powershell
 cd C:\laragon\www
-git clone https://github.com/B4ks0/webprogramming-lms.git
-cd webprogramming-lms
+git clone https://github.com/B4ks0/webprogramming-lms.git webprogramming
 ```
 
-Jika folder project sudah ada:
-
+Atau jika sudah ada foldernya:
 ```powershell
 cd C:\laragon\www\webprogramming\webprogramming
+git pull origin main
 ```
 
 ### 2. Buat database
-
-Buka terminal dan jalankan:
 
 ```powershell
 & "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot -e "CREATE DATABASE IF NOT EXISTS db_webprogramming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
-Jika path MySQL berbeda, sesuaikan dengan folder MySQL di Laragon.
+> Sesuaikan path MySQL jika versi berbeda. Cek folder di `C:\laragon\bin\mysql\`.
 
-### 3. Import schema
+### 3. Import database (schema + dummy data)
 
 ```powershell
-& "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot db_webprogramming < admin\lms.sql
+& "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot db_webprogramming < database\db_webprogramming.sql
 ```
 
-### 4. Jalankan website
+### 4. Akses website
+
+Pastikan Laragon Apache sudah aktif, lalu buka:
+
+```
+http://localhost/webprogramming/webprogramming/
+```
+
+Atau jika ingin jalankan manual dengan PHP built-in server:
 
 ```powershell
 php -S 127.0.0.1:8002
 ```
+Buka: `http://127.0.0.1:8002`
 
-Buka:
+---
 
-```text
-http://127.0.0.1:8002
-```
+## Setup dengan SQLite (tanpa MySQL)
 
-## Setup Alternatif Dengan SQLite
+Gunakan ini jika tidak ingin mengaktifkan MySQL.
 
-Gunakan mode ini kalau Laragon MySQL tidak aktif atau kamu ingin menjalankan project tanpa MySQL.
-
-### 1. Buat database SQLite
+### 1. Generate database SQLite
 
 ```powershell
 cd C:\laragon\www\webprogramming\webprogramming
 php scripts\init_sqlite.php
 ```
 
-Perintah ini membuat file:
-
-```text
-database/database.sqlite
-```
-
-File SQLite ini tidak dipush ke GitHub karena masuk `.gitignore`.
-
-### 2. Jalankan website dalam mode SQLite
+### 2. Jalankan dalam mode SQLite
 
 PowerShell:
-
 ```powershell
 $env:APP_DB="sqlite"
 php -S 127.0.0.1:8002
 ```
 
 Command Prompt:
-
 ```cmd
 set APP_DB=sqlite
 php -S 127.0.0.1:8002
 ```
 
-Buka:
+Buka: `http://127.0.0.1:8002`
 
-```text
-http://127.0.0.1:8002
-```
-
-### 3. Kembali ke MySQL
-
-Tutup server PHP, lalu jalankan tanpa `APP_DB=sqlite`:
-
-```powershell
-Remove-Item Env:\APP_DB
-php -S 127.0.0.1:8002
-```
-
-Atau buka terminal baru dan langsung jalankan:
-
-```powershell
-php -S 127.0.0.1:8002
-```
+---
 
 ## Konfigurasi Database
 
-File konfigurasi ada di:
+File: `koneksi/koneksi.php`
 
-```text
-koneksi/koneksi.php
+Default MySQL (tanpa env variable):
+```
+Host : localhost
+User : root
+Pass : (kosong)
+DB   : db_webprogramming
 ```
 
-Default MySQL:
-
-```text
-DB_HOST=localhost
-DB_USER=root
-DB_PASS=
-DB_NAME=db_webprogramming
-```
-
-Kamu bisa override lewat environment variable:
-
+Override via environment variable:
 ```powershell
 $env:DB_HOST="localhost"
 $env:DB_USER="root"
@@ -185,73 +171,43 @@ $env:DB_NAME="db_webprogramming"
 php -S 127.0.0.1:8002
 ```
 
-Untuk SQLite:
+---
 
-```powershell
-$env:APP_DB="sqlite"
-php -S 127.0.0.1:8002
-```
-
-## Cara Pakai Singkat
+## Cara Pakai
 
 ### Admin
-
-1. Login sebagai admin.
-2. Buka `Pengguna` untuk tambah/edit/hapus admin, dosen, dan mahasiswa.
-3. Buka `Mata Kuliah` untuk tambah/edit/hapus mata kuliah.
-4. Buka `Peserta MK` untuk memasukkan mahasiswa ke mata kuliah.
-5. Buka `Materi` untuk upload atau kelola materi.
-6. Buka `Tugas` untuk buat tugas, deadline, dan cek submission.
+1. Login → `admin@example.com / admin123`
+2. **Users** — tambah/edit/hapus dosen dan mahasiswa
+3. **Categories** — buat kategori mata kuliah
+4. **Courses** — tambah mata kuliah, assign ke dosen dan kategori
+5. **Lessons** — upload materi per mata kuliah
+6. **Enrollments** — daftarkan mahasiswa ke mata kuliah
+7. **Ruang Kelas** — kelola data kelas
+8. **Jadwal** — buat jadwal: course + kelas + hari + jam + ruangan
+9. **Absensi** — catat kehadiran mahasiswa, filter by course atau mahasiswa
 
 ### Dosen
-
-1. Login sebagai dosen.
-2. Buat mata kuliah baru dari menu `Tambah MK`.
-3. Buka `Peserta MK` untuk memasukkan mahasiswa ke mata kuliah miliknya.
-4. Upload materi dari menu `Materi`.
-5. Buat tugas dan deadline dari menu `Tugas`.
-6. Cek submission mahasiswa, beri nilai, dan feedback.
+1. Login → `dosen@example.com / dosen123`
+2. Kelola mata kuliah yang diampu
+3. Buat dan kelola materi, tugas, jadwal, dan absensi
 
 ### Mahasiswa
+1. Login → `mahasiswa@example.com / mahasiswa123`
+2. Lihat mata kuliah yang sudah dienrollkan
+3. Download materi, upload jawaban tugas
+4. Cek nilai dan feedback dosen
 
-1. Login sebagai mahasiswa.
-2. Mahasiswa hanya melihat mata kuliah yang sudah dimasukkan oleh admin/dosen.
-3. Buka `Materi` untuk melihat/download materi.
-4. Buka `Tugas` untuk melihat tugas dan upload jawaban.
-5. Lihat nilai akhir/status di dashboard.
-
-## Folder Upload
-
-File upload tersimpan di:
-
-```text
-uploads/materi
-uploads/tugas
-uploads/submissions
-```
-
-Isi folder upload tidak dipush ke GitHub. Hanya file `.gitkeep` yang disimpan agar struktur folder tetap ada.
+---
 
 ## Troubleshooting
 
-### Port 8002 sudah dipakai
-
-Gunakan port lain:
-
+### Port sudah dipakai
 ```powershell
 php -S 127.0.0.1:8003
 ```
 
-Lalu buka:
-
-```text
-http://127.0.0.1:8003
-```
-
 ### MySQL tidak aktif
-
 Gunakan SQLite:
-
 ```powershell
 php scripts\init_sqlite.php
 $env:APP_DB="sqlite"
@@ -259,51 +215,24 @@ php -S 127.0.0.1:8002
 ```
 
 ### Error `could not find driver`
+Ekstensi PDO belum aktif. Cek dengan `php -m` dan pastikan ada `PDO`, `pdo_mysql`, atau `pdo_sqlite`.
 
-Artinya ekstensi PDO untuk database belum aktif.
-
-Cek:
-
+### Reset database MySQL
 ```powershell
-php -m
-```
-
-Pastikan ada:
-
-```text
-PDO
-pdo_mysql
-pdo_sqlite
+& "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot -e "DROP DATABASE IF EXISTS db_webprogramming; CREATE DATABASE db_webprogramming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+& "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot db_webprogramming < database\db_webprogramming.sql
 ```
 
 ### Reset database SQLite
-
-Hapus file SQLite lalu generate ulang:
-
 ```powershell
 Remove-Item database\database.sqlite
 php scripts\init_sqlite.php
 ```
 
-### Reset database MySQL
+---
 
-```powershell
-& "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot -e "DROP DATABASE IF EXISTS db_webprogramming; CREATE DATABASE db_webprogramming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-& "C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe" -uroot db_webprogramming < admin\lms.sql
+## Repository
+
 ```
-
-## Git
-
-Commit perubahan:
-
-```powershell
-git add .
-git commit -m "Update LMS"
-git push
-```
-
-Repo:
-
-```text
 https://github.com/B4ks0/webprogramming-lms
 ```
