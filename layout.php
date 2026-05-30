@@ -70,9 +70,32 @@ $pages = [
     'users' => ['admin' => 'admin/users.php'],
     'tambah_user' => ['admin' => 'admin/tambah_user.php'],
     'ubah_user' => ['admin' => 'admin/ubah_user.php'],
+    'kelas' => ['admin' => 'admin/kelas.php'],
+    'tambah_kelas' => ['admin' => 'admin/tambah_kelas.php'],
+    'ubah_kelas' => ['admin' => 'admin/ubah_kelas.php'],
+    'hapus_kelas' => ['admin' => 'admin/hapus_kelas.php'],
+    'categories' => ['admin' => 'admin/categories.php'],
+    'tambah_category' => ['admin' => 'admin/tambah_category.php'],
+    'ubah_category' => ['admin' => 'admin/ubah_category.php'],
+    'hapus_category' => ['admin' => 'admin/hapus_category.php'],
+    'jadwal' => ['admin' => 'admin/jadwal.php', 'dosen' => 'admin/jadwal.php'],
+    'tambah_jadwal' => ['admin' => 'admin/tambah_jadwal.php', 'dosen' => 'admin/tambah_jadwal.php'],
+    'ubah_jadwal' => ['admin' => 'admin/ubah_jadwal.php', 'dosen' => 'admin/ubah_jadwal.php'],
+    'hapus_jadwal' => ['admin' => 'admin/hapus_jadwal.php', 'dosen' => 'admin/hapus_jadwal.php'],
+    'absensi'       => ['admin' => 'admin/absensi.php', 'dosen' => 'admin/absensi.php'],
+    'tambah_absensi'=> ['admin' => 'admin/tambah_absensi.php', 'dosen' => 'admin/tambah_absensi.php'],
+    'ubah_absensi'  => ['admin' => 'admin/ubah_absensi.php', 'dosen' => 'admin/ubah_absensi.php'],
+    'hapus_absensi' => ['admin' => 'admin/hapus_absensi.php', 'dosen' => 'admin/hapus_absensi.php'],
 ];
 
 $content = $pages[$page][$role] ?? $pages['dashboard'][$role] ?? 'siswa/dashboard.php';
+
+$roleLabel = [
+    'admin' => 'ADMIN',
+    'dosen' => 'DOSEN',
+    'mahasiswa' => 'MAHASISWA',
+];
+$brandLabel = 'SELAMAT DATANG ' . ($roleLabel[$role] ?? strtoupper($role));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,71 +108,138 @@ $content = $pages[$page][$role] ?? $pages['dashboard'][$role] ?? 'siswa/dashboar
 </head>
 <body id="page-top">
     <div id="wrapper">
+        <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="layout.php">
-                <div class="sidebar-brand-icon"><i class="fas fa-graduation-cap"></i></div>
-                <div class="sidebar-brand-text mx-3">LMS</div>
+                <div class="sidebar-brand-icon"><i class="fas fa-smile"></i></div>
+                <div class="sidebar-brand-text mx-3" style="font-size:0.85rem;line-height:1.3">
+                    SELAMAT DATANG<br><strong><?php echo e($roleLabel[$role] ?? strtoupper($role)); ?></strong>
+                </div>
             </a>
             <hr class="sidebar-divider my-0">
+
+            <!-- Dashboard -->
             <li class="nav-item <?php echo $page === 'dashboard' ? 'active' : ''; ?>">
                 <a class="nav-link" href="layout.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i><span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item <?php echo $page === 'matakuliah' ? 'active' : ''; ?>">
+
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Data Master</div>
+
+            <!-- Ruang Kelas (admin only) -->
+            <?php if ($role === 'admin'): ?>
+            <li class="nav-item <?php echo in_array($page, ['kelas','tambah_kelas','ubah_kelas'], true) ? 'active' : ''; ?>">
+                <a class="nav-link" href="layout.php?page=kelas">
+                    <i class="fas fa-fw fa-door-open"></i><span>Ruang Kelas</span>
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <!-- Categories (admin only) -->
+            <?php if ($role === 'admin'): ?>
+            <li class="nav-item <?php echo in_array($page, ['categories','tambah_category','ubah_category'], true) ? 'active' : ''; ?>">
+                <a class="nav-link" href="layout.php?page=categories">
+                    <i class="fas fa-fw fa-tags"></i><span>Categories</span>
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <!-- Users (admin only) -->
+            <?php if ($role === 'admin'): ?>
+            <li class="nav-item <?php echo in_array($page, ['users','tambah_user','ubah_user'], true) ? 'active' : ''; ?>">
+                <a class="nav-link" href="layout.php?page=users">
+                    <i class="fas fa-fw fa-users"></i><span>Users</span>
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <!-- Courses -->
+            <li class="nav-item <?php echo in_array($page, ['matakuliah','tambah_mk','ubah_mk'], true) ? 'active' : ''; ?>">
                 <a class="nav-link" href="layout.php?page=matakuliah">
-                    <i class="fas fa-fw fa-book"></i><span>Mata Kuliah</span>
+                    <i class="fas fa-fw fa-graduation-cap"></i><span>Courses</span>
                 </a>
             </li>
-            <li class="nav-item <?php echo in_array($page, ['materi', 'tambah_materi', 'ubah_materi'], true) ? 'active' : ''; ?>">
+
+            <!-- Lessons -->
+            <li class="nav-item <?php echo in_array($page, ['materi','tambah_materi','ubah_materi'], true) ? 'active' : ''; ?>">
                 <a class="nav-link" href="layout.php?page=materi">
-                    <i class="fas fa-fw fa-file-alt"></i><span>Materi</span>
+                    <i class="fas fa-fw fa-book-open"></i><span>Lessons</span>
                 </a>
             </li>
-            <li class="nav-item <?php echo in_array($page, ['tugas', 'tambah_tugas', 'ubah_tugas', 'submit_tugas', 'cek_tugas'], true) ? 'active' : ''; ?>">
-                <a class="nav-link" href="layout.php?page=tugas">
-                    <i class="fas fa-fw fa-tasks"></i><span>Tugas</span>
-                </a>
-            </li>
+
+            <!-- Enrollments -->
             <?php if ($role === 'admin' || $role === 'dosen'): ?>
             <li class="nav-item <?php echo $page === 'peserta' ? 'active' : ''; ?>">
                 <a class="nav-link" href="layout.php?page=peserta">
-                    <i class="fas fa-fw fa-user-graduate"></i><span>Peserta MK</span>
+                    <i class="fas fa-fw fa-list-alt"></i><span>Enrollments</span>
                 </a>
             </li>
             <?php endif; ?>
+
+            <!-- Jadwal -->
             <?php if ($role === 'admin' || $role === 'dosen'): ?>
-            <li class="nav-item <?php echo $page === 'tambah_mk' ? 'active' : ''; ?>">
-                <a class="nav-link" href="layout.php?page=tambah_mk">
-                    <i class="fas fa-fw fa-plus-circle"></i><span>Tambah MK</span>
+            <li class="nav-item <?php echo in_array($page, ['jadwal','tambah_jadwal','ubah_jadwal'], true) ? 'active' : ''; ?>">
+                <a class="nav-link" href="layout.php?page=jadwal">
+                    <i class="fas fa-fw fa-calendar-alt"></i><span>Jadwal</span>
                 </a>
             </li>
             <?php endif; ?>
-            <?php if ($role === 'admin'): ?>
-            <li class="nav-item <?php echo in_array($page, ['users', 'tambah_user', 'ubah_user'], true) ? 'active' : ''; ?>">
-                <a class="nav-link" href="layout.php?page=users">
-                    <i class="fas fa-fw fa-users-cog"></i><span>Pengguna</span>
+
+            <!-- Absensi -->
+            <?php if ($role === 'admin' || $role === 'dosen'): ?>
+            <li class="nav-item <?php echo in_array($page, ['absensi','tambah_absensi','ubah_absensi'], true) ? 'active' : ''; ?>">
+                <a class="nav-link" href="layout.php?page=absensi">
+                    <i class="fas fa-fw fa-clipboard-check"></i><span>Absensi</span>
                 </a>
             </li>
             <?php endif; ?>
-            <hr class="sidebar-divider">
+
+            <hr class="sidebar-divider d-none d-md-block">
             <li class="nav-item">
                 <a class="nav-link" href="logout.php">
                     <i class="fas fa-fw fa-sign-out-alt"></i><span>Logout</span>
                 </a>
             </li>
         </ul>
+        <!-- End Sidebar -->
 
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
+                <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <div class="mr-auto text-gray-700 font-weight-bold text-capitalize"><?php echo e($role); ?></div>
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo e($_SESSION['username']); ?></span>
-                    <img class="img-profile rounded-circle" src="assets/img/undraw_profile.svg" style="width: 32px; height: 32px;">
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="navbar-nav ml-auto">
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo e($_SESSION['username']); ?></span>
+                                <img class="img-profile rounded-circle" src="assets/img/undraw_profile.svg" style="width:32px;height:32px;">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
                 </nav>
+                <!-- End Topbar -->
+
                 <div class="container-fluid">
                     <?php include $content; ?>
                 </div>
@@ -157,7 +247,7 @@ $content = $pages[$page][$role] ?? $pages['dashboard'][$role] ?? 'siswa/dashboar
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Webprograming LMS</span>
+                        <span>Webprograming LMS &copy; <?php echo date('Y'); ?></span>
                     </div>
                 </div>
             </footer>
