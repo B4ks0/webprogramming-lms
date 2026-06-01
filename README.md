@@ -33,14 +33,9 @@ Aplikasi Learning Management System berbasis PHP untuk pengelolaan mata kuliah, 
 Admin      : admin@example.com    / admin123
 Dosen 1    : dosen@example.com    / dosen123
 Dosen 2    : sari@example.com     / dosen123
-Dosen 3    : hendra@example.com   / dosen123
-Dosen 4    : maya@example.com     / dosen123
 Mahasiswa 1: mahasiswa@example.com / mahasiswa123
 Mahasiswa 2: budi@example.com     / mahasiswa123
 Mahasiswa 3: citra@example.com    / mahasiswa123
-Mahasiswa 4: dian@example.com     / mahasiswa123
-Mahasiswa 5: eko@example.com      / mahasiswa123
-Mahasiswa 6: fina@example.com     / mahasiswa123
 ```
 
 ## Struktur Folder

@@ -47,11 +47,6 @@ if (isset($_SESSION['status']) && $_SESSION['status'] === 'login') {
             </form>
 
             <hr>
-            <div class="small text-gray-700">
-              <div>Admin: admin@example.com / admin123</div>
-              <div>Dosen: dosen@example.com / dosen123</div>
-              <div>Mahasiswa: mahasiswa@example.com / mahasiswa123</div>
-            </div>
           </div>
         </div>
       </div>
